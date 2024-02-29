@@ -8,10 +8,10 @@
     },
 
     "require": {
-        "php": "^7.4|8.0.*|8.1.*",
+        "php": ">= 7.4, < 8.4",
         "doctrine/annotations": "^1.12",
         "jms/metadata": "^2.6.1",
-        "symfony/property-access": "^3.4|^4.0|^5.0"
+        "symfony/property-access": "^3.4|^4.0|^5.0|^6.0|^7.0"
     },
 
     "require-dev": {
