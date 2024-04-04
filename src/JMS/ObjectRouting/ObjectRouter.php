@@ -21,6 +21,8 @@ namespace JMS\ObjectRouting;
 use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\ObjectRouting\Metadata\ClassMetadata;
 use JMS\ObjectRouting\Metadata\Driver\AnnotationDriver;
+use JMS\ObjectRouting\Metadata\Driver\AttributeDriver;
+use Metadata\Driver\DriverChain;
 use Metadata\MetadataFactory;
 use Metadata\MetadataFactoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -35,9 +37,10 @@ class ObjectRouter
     {
         return new self(
             $router,
-            new MetadataFactory(
-                new AnnotationDriver(new AnnotationReader())
-            )
+            new MetadataFactory(new DriverChain([
+                new AttributeDriver(),
+                new AnnotationDriver(new AnnotationReader()),
+            ]))
         );
     }
 
