@@ -19,6 +19,7 @@
 namespace JMS\ObjectRouting\Annotation;
 
 /**
+ * @deprecated
  * @Annotation
  * @NamedArgumentConstructor
  * @Target("CLASS")

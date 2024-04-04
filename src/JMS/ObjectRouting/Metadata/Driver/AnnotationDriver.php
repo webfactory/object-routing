@@ -23,6 +23,9 @@ use JMS\ObjectRouting\Annotation\ObjectRoute;
 use JMS\ObjectRouting\Metadata\ClassMetadata;
 use Metadata\Driver\DriverInterface;
 
+/**
+ * @deprecated 
+ */
 class AnnotationDriver implements DriverInterface
 {
     private $reader;
