@@ -18,9 +18,7 @@
 
 namespace JMS\ObjectRouting;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\ObjectRouting\Metadata\ClassMetadata;
-use JMS\ObjectRouting\Metadata\Driver\AnnotationDriver;
 use JMS\ObjectRouting\Metadata\Driver\AttributeDriver;
 use Metadata\Driver\DriverChain;
 use Metadata\MetadataFactory;
@@ -39,7 +37,6 @@ class ObjectRouter
             $router,
             new MetadataFactory(new DriverChain([
                 new AttributeDriver(),
-                new AnnotationDriver(new AnnotationReader()),
             ]))
         );
     }

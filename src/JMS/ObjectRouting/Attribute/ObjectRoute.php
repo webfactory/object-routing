@@ -18,9 +18,8 @@
 
 namespace JMS\ObjectRouting\Attribute;
 
-/** @final */
 #[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS)]
-class ObjectRoute
+final class ObjectRoute
 {
     /** @var string @Required */
     public $type;
