@@ -18,6 +18,7 @@
 
 namespace JMS\ObjectRouting\Metadata\Driver;
 
+use JMS\ObjectRouting\Attribute\ObjectRoute;
 use JMS\ObjectRouting\Metadata\ClassMetadata;
 use Metadata\Driver\DriverInterface;
 
@@ -40,7 +41,7 @@ class AttributeDriver implements DriverInterface
     {
         $attributes = [];
 
-        foreach ($class->getAttributes(\JMS\ObjectRouting\Attribute\ObjectRoute::class) as $attr) {
+        foreach ($class->getAttributes(ObjectRoute::class) as $attr) {
             $attributes[] = $attr->newInstance();
         }
 

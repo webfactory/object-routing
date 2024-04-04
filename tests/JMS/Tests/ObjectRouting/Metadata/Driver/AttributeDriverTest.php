@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 class AttributeDriverTest extends TestCase
 {
+    private readonly AttributeDriver $driver;
+
     public function testLoad()
     {
         $metadata = $this->driver->loadMetadataForClass(new \ReflectionClass(BlogPostWithAttributes::class));

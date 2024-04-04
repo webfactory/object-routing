@@ -2,7 +2,7 @@
 
 namespace JMS\Tests\ObjectRouting\Metadata\Driver\Fixture;
 
-use JMS\ObjectRouting\Annotation\ObjectRoute;
+use JMS\ObjectRouting\Attribute\ObjectRoute;
 
 #[ObjectRoute(type: "view", name: "blog_post_view", params: ['slug' => 'slug'])]
 #[ObjectRoute(type: "edit", name: "blog_post_edit", params: ['slug' => 'slug'])]
