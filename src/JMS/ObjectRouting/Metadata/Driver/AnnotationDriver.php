@@ -29,6 +29,7 @@ class AnnotationDriver implements DriverInterface
 
     public function __construct(Reader $reader)
     {
+        trigger_deprecation('webfactory/object-routing', '1.7.0', 'The %s driver is deprecated. Use another configuration mechanism, or switch from annotations to PHP 8 attributes.', self::class);
         $this->reader = $reader;
     }
 
@@ -51,12 +52,14 @@ class AnnotationDriver implements DriverInterface
     {
         $annots = [];
 
-        if (PHP_MAJOR_VERSION >= 8) {
-            foreach ($class->getAttributes() as $attr) {
-                if (str_starts_with($attr->getName(), 'JMS\\ObjectRouting\\Annotation\\')) {
-                    $annots[] = $attr->newInstance();
-                }
+        foreach ($class->getAttributes() as $attr) {
+            if (str_starts_with($attr->getName(), 'JMS\\ObjectRouting\\Annotation\\')) {
+                $annots[] = $attr->newInstance();
             }
+        }
+
+        if ($annots) {
+            trigger_deprecation('webfactory/object-routing', '1.7.0', 'Discovering object route attributes through the %s driver is deprecated. Make sure the %s driver is used with a higher priority.', self::class, AttributeDriver::class);
         }
 
         return $annots;

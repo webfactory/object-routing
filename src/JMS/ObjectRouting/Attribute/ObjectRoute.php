@@ -16,18 +16,25 @@
  * limitations under the License.
  */
 
-namespace JMS\ObjectRouting\Annotation;
+namespace JMS\ObjectRouting\Attribute;
 
-/**
- * @Annotation
- * @NamedArgumentConstructor
- * @Target("CLASS")
- */
-final class ObjectRoute extends \JMS\ObjectRouting\Attribute\ObjectRoute
+/** @final */
+#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS)]
+class ObjectRoute
 {
+    /** @var string @Required */
+    public $type;
+
+    /** @var string @Required */
+    public $name;
+
+    /** @var array */
+    public $params = array();
+
     public function __construct(string $type, string $name, array $params = [])
     {
-        trigger_deprecation('webfactory/object-routing', '1.7.0', 'Using annotations to configure object routes is deprecated. Use the %s attribute instead', \JMS\ObjectRouting\Attribute\ObjectRoute::class);
-        parent::__construct($type, $name, $params);
+        $this->type = $type;
+        $this->name = $name;
+        $this->params = $params;
     }
 }
