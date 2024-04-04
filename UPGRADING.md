@@ -3,7 +3,7 @@
 # Version 2.0.0
 
 * The `\JMS\ObjectRouting\Metadata\Driver\AnnotationDriver` and `\JMS\ObjectRouting\Annotation\ObjectRoute` classes have been removed.
-* The `\JMS\ObjectRouting\Attribute\ObjectRoute` is now `final`.
+* The `\JMS\ObjectRouting\Attribute\ObjectRoute` class is now `final`.
 
 # Version 1.7.0 
 
