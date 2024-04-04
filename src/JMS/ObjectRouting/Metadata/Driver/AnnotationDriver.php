@@ -24,7 +24,7 @@ use JMS\ObjectRouting\Metadata\ClassMetadata;
 use Metadata\Driver\DriverInterface;
 
 /**
- * @deprecated 
+ * @deprecated
  */
 class AnnotationDriver implements DriverInterface
 {
