@@ -11,14 +11,12 @@ env:
 
 jobs:
     PHPUnit:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-22.04
         strategy:
             fail-fast: false
             matrix:
                 include:
-                    - { php-version: 7.4, dependency-version: prefer-lowest }
-                    - { php-version: 7.4, dependency-version: prefer-stable }
-                    - { php-version: 8.1, dependency-version: prefer-stable }
+                    - { php-version: 8.1, dependency-version: prefer-lowest }
                     - { php-version: 8.2, dependency-version: prefer-stable }
                     - { php-version: 8.3, dependency-version: prefer-stable }
         name: PHPUnit (PHP ${{matrix.php-version}}, ${{ matrix.dependency-version }})
