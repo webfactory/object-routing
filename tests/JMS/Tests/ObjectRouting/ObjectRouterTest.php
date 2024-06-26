@@ -73,6 +73,26 @@ class ObjectRouterTest extends TestCase
         $this->assertEquals('/foobar', $this->router->generate('view', $object));
     }
 
+    public function testGenerateWithParamExpressionThatRefersToParam()
+    {
+        $metadata = new ClassMetadata('stdClass');
+        $metadata->addRoute('view', 'view_name', ['foo' => 'bar'], ['concat' => 'params["foo"] ~ this.bar']);
+
+        $object = new \stdClass;
+        $object->bar = 'baz';
+
+        $this->factory->expects($this->once())
+            ->method('getMetadataForClass')
+            ->will($this->returnValue($metadata));
+
+        $this->adapter->expects($this->once())
+            ->method('generate')
+            ->with('view_name', array('foo' => 'baz', 'concat' => 'bazbaz'), false)
+            ->will($this->returnValue('/foobar'));
+
+        $this->assertEquals('/foobar', $this->router->generate('view', $object));
+    }
+
     public function testGenerateWithNullableParamExpression()
     {
         $metadata = new ClassMetadata('stdClass');

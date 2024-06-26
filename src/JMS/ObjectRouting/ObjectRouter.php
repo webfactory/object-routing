@@ -93,10 +93,10 @@ class ObjectRouter
 
         foreach ($route['paramExpressions'] as $k => $expression) {
             if (!$expression instanceof ParsedExpression) {
-                $expression = $this->expressionLanguage->parse($expression, ['this']);
+                $expression = $this->expressionLanguage->parse($expression, ['this', 'params']);
                 $metadata->routes[$type]['paramExpressions'][$k] = $expression;
             }
-            $evaluated = $this->expressionLanguage->evaluate($expression, ['this' => $object]);
+            $evaluated = $this->expressionLanguage->evaluate($expression, ['this' => $object, 'params' => $params]);
             if ($k[0] === '?') {
                 if ($evaluated === null) {
                     continue;
