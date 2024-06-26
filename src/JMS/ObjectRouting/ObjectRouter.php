@@ -24,6 +24,7 @@ use Metadata\Driver\DriverChain;
 use Metadata\MetadataFactory;
 use Metadata\MetadataFactoryInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\ExpressionLanguage\ParsedExpression;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class ObjectRouter
@@ -33,22 +34,23 @@ class ObjectRouter
     private $accessor;
     private $expressionLanguage;
 
-    public static function create(RouterInterface $router)
+    public static function create(RouterInterface $router, ?ExpressionLanguage $expressionLanguage = null)
     {
         return new self(
             $router,
             new MetadataFactory(new DriverChain([
                 new AttributeDriver(),
-            ]))
+            ])),
+            $expressionLanguage
         );
     }
 
-    public function __construct(RouterInterface $router, MetadataFactoryInterface $metadataFactory)
+    public function __construct(RouterInterface $router, MetadataFactoryInterface $metadataFactory, ?ExpressionLanguage $expressionLanguage = null)
     {
         $this->router = $router;
         $this->metadataFactory = $metadataFactory;
         $this->accessor = new PropertyAccessor();
-        $this->expressionLanguage = new ExpressionLanguage();
+        $this->expressionLanguage = $expressionLanguage ?? new ExpressionLanguage();
     }
 
     /**
@@ -90,6 +92,10 @@ class ObjectRouter
         }
 
         foreach ($route['paramExpressions'] as $k => $expression) {
+            if (!$expression instanceof ParsedExpression) {
+                $expression = $this->expressionLanguage->parse($expression, ['this']);
+                $metadata->routes[$type]['paramExpressions'][$k] = $expression;
+            }
             $evaluated = $this->expressionLanguage->evaluate($expression, ['this' => $object]);
             if ($k[0] === '?') {
                 if ($evaluated === null) {
