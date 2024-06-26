@@ -18,6 +18,6 @@ class ClassMetadataTest extends TestCase
         $base->merge($merged);
 
         $this->assertEquals(self::class, $base->name);
-        $this->assertEquals(['test' => ['name' => 'merged-route', 'params' => []]], $base->routes);
+        $this->assertEquals(['test' => ['name' => 'merged-route', 'params' => [], 'paramExpressions' => []]], $base->routes);
     }
 }

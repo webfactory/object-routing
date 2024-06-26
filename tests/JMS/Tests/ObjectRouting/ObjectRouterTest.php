@@ -53,6 +53,47 @@ class ObjectRouterTest extends TestCase
         $this->assertEquals('/foobar', $this->router->generate('view', $object));
     }
 
+    public function testGenerateWithParamExpression()
+    {
+        $metadata = new ClassMetadata('stdClass');
+        $metadata->addRoute('view', 'view_name', [], ['foo' => 'this.bar']);
+
+        $object = new \stdClass;
+        $object->bar = 'baz';
+
+        $this->factory->expects($this->once())
+            ->method('getMetadataForClass')
+            ->will($this->returnValue($metadata));
+
+        $this->adapter->expects($this->once())
+            ->method('generate')
+            ->with('view_name', array('foo' => 'baz'), false)
+            ->will($this->returnValue('/foobar'));
+
+        $this->assertEquals('/foobar', $this->router->generate('view', $object));
+    }
+
+    public function testGenerateWithNullableParamExpression()
+    {
+        $metadata = new ClassMetadata('stdClass');
+        $metadata->addRoute('view', 'view_name', [], ['?foo' => 'this.bar', '?quux' => 'this.barbaz']);
+
+        $object = new \stdClass;
+        $object->bar = 'baz';
+        $object->barbaz = null;
+
+        $this->factory->expects($this->once())
+            ->method('getMetadataForClass')
+            ->will($this->returnValue($metadata));
+
+        $this->adapter->expects($this->once())
+            ->method('generate')
+            ->with('view_name', array('foo' => 'baz'), false)
+            ->will($this->returnValue('/foobar'));
+
+        $this->assertEquals('/foobar', $this->router->generate('view', $object));
+    }
+
     public function testGenerateNonExistentType()
     {
         $this->expectException(\RuntimeException::class);

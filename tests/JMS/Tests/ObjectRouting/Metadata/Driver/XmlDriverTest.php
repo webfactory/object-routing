@@ -18,10 +18,10 @@ class XmlDriverTest extends TestCase
         $metadata = $this->driver->loadMetadataForClass(new \ReflectionClass('JMS\Tests\ObjectRouting\Metadata\Driver\Fixture\BlogPost'));
         $this->assertCount(2, $metadata->routes);
 
-        $routes = array(
-            'view' => array('name' => 'blog_post_view', 'params' => array('slug' => 'slug')),
-            'edit' => array('name' => 'blog_post_edit', 'params' => array('slug' => 'slug')),
-        );
+        $routes = [
+            'view' => ['name' => 'blog_post_view', 'params' => ['slug' => 'slug'], 'paramExpressions' => ['?year' => 'this.isArchived ? this.year : null']],
+            'edit' => ['name' => 'blog_post_edit', 'params' => ['slug' => 'slug'], 'paramExpressions' => []],
+        ];
         $this->assertEquals($routes, $metadata->routes);
     }
 

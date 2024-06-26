@@ -31,7 +31,7 @@ class AttributeDriver implements DriverInterface
         $hasMetadata = false;
         foreach ($this->fetchAttributes($class) as $attribute) {
             $hasMetadata = true;
-            $metadata->addRoute($attribute->type, $attribute->name, $attribute->params);
+            $metadata->addRoute($attribute->type, $attribute->name, $attribute->params, $attribute->paramExpressions);
         }
 
         return $hasMetadata ? $metadata : null;

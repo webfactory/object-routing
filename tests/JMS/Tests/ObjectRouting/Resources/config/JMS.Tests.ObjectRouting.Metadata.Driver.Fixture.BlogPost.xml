@@ -3,6 +3,7 @@
     <class name="JMS\Tests\ObjectRouting\Metadata\Driver\Fixture\BlogPost">
         <route type="view" name="blog_post_view">
             <param name="slug">slug</param>
+            <paramExpression name="?year">this.isArchived ? this.year : null</paramExpression>
         </route>
         <route type="edit" name="blog_post_edit">
             <param name="slug">slug</param>

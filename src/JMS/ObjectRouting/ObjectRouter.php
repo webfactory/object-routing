@@ -23,6 +23,7 @@ use JMS\ObjectRouting\Metadata\Driver\AttributeDriver;
 use Metadata\Driver\DriverChain;
 use Metadata\MetadataFactory;
 use Metadata\MetadataFactoryInterface;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class ObjectRouter
@@ -30,6 +31,7 @@ class ObjectRouter
     private $router;
     private $metadataFactory;
     private $accessor;
+    private $expressionLanguage;
 
     public static function create(RouterInterface $router)
     {
@@ -46,6 +48,7 @@ class ObjectRouter
         $this->router = $router;
         $this->metadataFactory = $metadataFactory;
         $this->accessor = new PropertyAccessor();
+        $this->expressionLanguage = new ExpressionLanguage();
     }
 
     /**
@@ -84,6 +87,18 @@ class ObjectRouter
         $params = $extraParams;
         foreach ($route['params'] as $k => $path) {
             $params[$k] = $this->accessor->getValue($object, $path);
+        }
+
+        foreach ($route['paramExpressions'] as $k => $expression) {
+            $evaluated = $this->expressionLanguage->evaluate($expression, ['this' => $object]);
+            if ($k[0] === '?') {
+                if ($evaluated === null) {
+                    continue;
+                }
+                $params[substr($k, 1)] = $evaluated;
+            } else {
+                $params[$k] = $evaluated;
+            }
         }
 
         return $this->router->generate($route['name'], $params, $absolute);

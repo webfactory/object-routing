@@ -58,7 +58,12 @@ class YamlDriver extends AbstractFileDriver
             if (!array_key_exists('name', $value)) {
                 throw new RuntimeException('Could not find key "type" inside yaml element.');
             }
-            $metadata->addRoute($type, $value['name'], array_key_exists('params', $value) ? $value['params'] : array());
+            $metadata->addRoute(
+                $type,
+                $value['name'],
+                array_key_exists('params', $value) ? $value['params'] : array(),
+                array_key_exists('paramExpressions', $value) ? $value['paramExpressions'] : array()
+            );
         }
 
         return $metadata;
