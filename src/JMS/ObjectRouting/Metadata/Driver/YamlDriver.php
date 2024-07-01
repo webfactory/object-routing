@@ -24,19 +24,14 @@ use Metadata\Driver\AbstractFileDriver;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Class YamlDriver
- * @package JMS\ObjectRouting\Metadata\Driver
+ * Class YamlDriver.
+ *
  * @author  Sebastian Kroczek <sk@xbug.de>
  */
 class YamlDriver extends AbstractFileDriver
 {
-
-
     /**
      * Parses the content of the file, and converts it to the desired metadata.
-     *
-     * @param \ReflectionClass $class
-     * @param string           $file
      *
      * @return \Metadata\ClassMetadata|null
      */
@@ -48,27 +43,23 @@ class YamlDriver extends AbstractFileDriver
             throw new RuntimeException(sprintf('Expected metadata for class %s to be defined in %s.', $class->name, $file));
         }
 
-
         $config = $config[$name];
         $metadata = new ClassMetadata($name);
         $metadata->fileResources[] = $file;
         $metadata->fileResources[] = $class->getFileName();
 
         foreach ($config as $type => $value) {
-            if (!array_key_exists('name', $value)) {
+            if (!\array_key_exists('name', $value)) {
                 throw new RuntimeException('Could not find key "type" inside yaml element.');
             }
-            $metadata->addRoute($type, $value['name'], array_key_exists('params', $value) ? $value['params'] : array());
+            $metadata->addRoute($type, $value['name'], \array_key_exists('params', $value) ? $value['params'] : []);
         }
 
         return $metadata;
-
     }
 
     /**
      * Returns the extension of the file.
-     *
-     * @return string
      */
     protected function getExtension(): string
     {
