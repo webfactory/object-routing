@@ -17,10 +17,10 @@ class Symfony22AdapterTest extends TestCase
     {
         $this->router->expects($this->once())
             ->method('generate')
-            ->with('foo', array('bar' => 'baz'), UrlGeneratorInterface::ABSOLUTE_URL)
-            ->will($this->returnValue('/foo-bar-baz'));
+            ->with('foo', ['bar' => 'baz'], UrlGeneratorInterface::ABSOLUTE_URL)
+            ->willReturn('/foo-bar-baz');
 
-        $this->assertEquals('/foo-bar-baz', $this->adapter->generate('foo', array('bar' => 'baz'), true));
+        $this->assertEquals('/foo-bar-baz', $this->adapter->generate('foo', ['bar' => 'baz'], true));
     }
 
     protected function setUp(): void

@@ -2,8 +2,6 @@
 
 namespace JMS\Tests\ObjectRouting\Metadata\Driver;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use JMS\ObjectRouting\Metadata\Driver\AnnotationDriver;
 use JMS\ObjectRouting\Metadata\Driver\YamlDriver;
 use Metadata\Driver\FileLocator;
 use PHPUnit\Framework\TestCase;
@@ -32,6 +30,6 @@ class YamlDriverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->driver = new YamlDriver(new FileLocator(array('' => realpath(__DIR__.'/../../Resources/config'))));
+        $this->driver = new YamlDriver(new FileLocator(['' => realpath(__DIR__.'/../../Resources/config')]));
     }
 }

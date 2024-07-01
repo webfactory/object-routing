@@ -2,8 +2,6 @@
 
 namespace JMS\Tests\ObjectRouting\Metadata\Driver;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use JMS\ObjectRouting\Metadata\Driver\AnnotationDriver;
 use JMS\ObjectRouting\Metadata\Driver\XmlDriver;
 use Metadata\Driver\FileLocator;
 use PHPUnit\Framework\TestCase;
@@ -32,6 +30,6 @@ class XmlDriverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->driver = new XmlDriver(new FileLocator(array('' => realpath(__DIR__.'/../../Resources/config'))));
+        $this->driver = new XmlDriver(new FileLocator(['' => realpath(__DIR__.'/../../Resources/config')]));
     }
 }

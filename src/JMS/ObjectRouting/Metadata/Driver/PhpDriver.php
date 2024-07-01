@@ -18,14 +18,13 @@
 
 namespace JMS\ObjectRouting\Metadata\Driver;
 
-
 use JMS\ObjectRouting\Exception\RuntimeException;
 use JMS\ObjectRouting\Metadata\ClassMetadata;
 use Metadata\Driver\AbstractFileDriver;
 
 /**
- * Class PhpDriver
- * @package JMS\ObjectRouting\Metadata\Driver
+ * Class PhpDriver.
+ *
  * @author  Sebastian Kroczek <sk@xbug.de>
  */
 class PhpDriver extends AbstractFileDriver

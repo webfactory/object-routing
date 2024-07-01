@@ -18,25 +18,20 @@
 
 namespace JMS\ObjectRouting\Metadata\Driver;
 
-
 use JMS\ObjectRouting\Exception\RuntimeException;
 use JMS\ObjectRouting\Exception\XmlErrorException;
 use JMS\ObjectRouting\Metadata\ClassMetadata;
 use Metadata\Driver\AbstractFileDriver;
 
 /**
- * Class XmlDriver
- * @package JMS\ObjectRouting\Metadata\Driver
+ * Class XmlDriver.
+ *
  * @author  Sebastian Kroczek <sk@xbug.de>
  */
 class XmlDriver extends AbstractFileDriver
 {
-
     /**
      * Parses the content of the file, and converts it to the desired metadata.
-     *
-     * @param \ReflectionClass $class
-     * @param string           $file
      *
      * @return \Metadata\ClassMetadata|null
      */
@@ -57,28 +52,28 @@ class XmlDriver extends AbstractFileDriver
         $metadata->fileResources[] = $class->getFileName();
 
         if (null !== $xmlRootName = $elem->attributes()->{'xml-root-name'}) {
-            $metadata->xmlRootName = (string)$xmlRootName;
+            $metadata->xmlRootName = (string) $xmlRootName;
         }
         if (null !== $xmlRootNamespace = $elem->attributes()->{'xml-root-namespace'}) {
-            $metadata->xmlRootNamespace = (string)$xmlRootNamespace;
+            $metadata->xmlRootNamespace = (string) $xmlRootNamespace;
         }
 
         foreach ($elem->xpath('./route') as $r) {
-            if ('' === $type = (string)$r->attributes()->{'type'}) {
+            if ('' === $type = (string) $r->attributes()->{'type'}) {
                 throw new RuntimeException('Could not find attribute "type" inside XML element.');
             }
-            if ('' === $name = (string)$r->attributes()->{'name'}) {
+            if ('' === $name = (string) $r->attributes()->{'name'}) {
                 throw new RuntimeException('Could not find attribute "name" inside XML element.');
             }
 
-            $params = array();
+            $params = [];
             foreach ($r->xpath('./param') as $p) {
-                $params[(string)$p->attributes()] = (string)$p;
+                $params[(string) $p->attributes()] = (string) $p;
             }
 
-            $paramExpressions = array();
+            $paramExpressions = [];
             foreach ($r->xpath('./paramExpression') as $p) {
-                $paramExpressions[(string)$p->attributes()] = (string)$p;
+                $paramExpressions[(string) $p->attributes()] = (string) $p;
             }
 
             $metadata->addRoute($type, $name, $params, $paramExpressions);
@@ -89,8 +84,6 @@ class XmlDriver extends AbstractFileDriver
 
     /**
      * Returns the extension of the file.
-     *
-     * @return string
      */
     protected function getExtension(): string
     {

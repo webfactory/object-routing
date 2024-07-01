@@ -30,6 +30,6 @@ class PhpDriverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->driver = new PhpDriver(new FileLocator(array('' => realpath(__DIR__.'/../../Resources/config'))));
+        $this->driver = new PhpDriver(new FileLocator(['' => realpath(__DIR__.'/../../Resources/config')]));
     }
 }
