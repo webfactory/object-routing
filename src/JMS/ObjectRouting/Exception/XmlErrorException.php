@@ -2,7 +2,6 @@
 
 namespace JMS\ObjectRouting\Exception;
 
-
 class XmlErrorException extends RuntimeException
 {
     private $xmlError;
@@ -10,13 +9,13 @@ class XmlErrorException extends RuntimeException
     public function __construct(\LibXMLError $error)
     {
         switch ($error->level) {
-            case LIBXML_ERR_WARNING:
+            case \LIBXML_ERR_WARNING:
                 $level = 'WARNING';
                 break;
-            case LIBXML_ERR_FATAL:
+            case \LIBXML_ERR_FATAL:
                 $level = 'FATAL';
                 break;
-            case LIBXML_ERR_ERROR:
+            case \LIBXML_ERR_ERROR:
                 $level = 'ERROR';
                 break;
             default:

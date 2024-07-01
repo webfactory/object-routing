@@ -2,8 +2,6 @@
 
 namespace JMS\Tests\ObjectRouting\Metadata\Driver;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use JMS\ObjectRouting\Metadata\Driver\AnnotationDriver;
 use JMS\ObjectRouting\Metadata\Driver\XmlDriver;
 use Metadata\Driver\FileLocator;
 use PHPUnit\Framework\TestCase;
@@ -18,10 +16,10 @@ class XmlDriverTest extends TestCase
         $metadata = $this->driver->loadMetadataForClass(new \ReflectionClass('JMS\Tests\ObjectRouting\Metadata\Driver\Fixture\BlogPost'));
         $this->assertCount(2, $metadata->routes);
 
-        $routes = array(
-            'view' => array('name' => 'blog_post_view', 'params' => array('slug' => 'slug')),
-            'edit' => array('name' => 'blog_post_edit', 'params' => array('slug' => 'slug')),
-        );
+        $routes = [
+            'view' => ['name' => 'blog_post_view', 'params' => ['slug' => 'slug']],
+            'edit' => ['name' => 'blog_post_edit', 'params' => ['slug' => 'slug']],
+        ];
         $this->assertEquals($routes, $metadata->routes);
     }
 
@@ -32,6 +30,6 @@ class XmlDriverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->driver = new XmlDriver(new FileLocator(array('' => realpath(__DIR__.'/../../Resources/config'))));
+        $this->driver = new XmlDriver(new FileLocator(['' => realpath(__DIR__.'/../../Resources/config')]));
     }
 }

@@ -2,13 +2,13 @@
 
 /*
  * Copyright 2013 Johannes M. Schmitt <schmittjoh@gmail.com>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,30 +53,24 @@ class ObjectRouter
      *
      * @param string $type
      * @param object $object
-     * @param boolean $absolute
-     * @param array $extraParams
+     * @param bool   $absolute
      *
      * @throws \InvalidArgumentException
      */
-    public function generate($type, $object, $absolute = false, array $extraParams = array())
+    public function generate($type, $object, $absolute = false, array $extraParams = [])
     {
-        if ( ! is_object($object)) {
-            throw new \InvalidArgumentException(sprintf('$object must be an object, but got "%s".', gettype($object)));
+        if (!\is_object($object)) {
+            throw new \InvalidArgumentException(sprintf('$object must be an object, but got "%s".', \gettype($object)));
         }
 
         /** @var $metadata ClassMetadata */
-        $metadata = $this->metadataFactory->getMetadataForClass(get_class($object));
+        $metadata = $this->metadataFactory->getMetadataForClass($object::class);
         if (null === $metadata) {
-            throw new \RuntimeException(sprintf('There were no object routes defined for class "%s".', get_class($object)));
+            throw new \RuntimeException(sprintf('There were no object routes defined for class "%s".', $object::class));
         }
 
-        if ( ! isset($metadata->routes[$type])) {
-            throw new \RuntimeException(sprintf(
-                'The object of class "%s" has no route with type "%s". Available types: %s',
-                get_class($object),
-                $type,
-                implode(', ', array_keys($metadata->routes))
-            ));
+        if (!isset($metadata->routes[$type])) {
+            throw new \RuntimeException(sprintf('The object of class "%s" has no route with type "%s". Available types: %s', $object::class, $type, implode(', ', array_keys($metadata->routes))));
         }
 
         $route = $metadata->routes[$type];
@@ -89,12 +83,12 @@ class ObjectRouter
         return $this->router->generate($route['name'], $params, $absolute);
     }
 
-    public function path($type, $object, array $extraParams = array())
+    public function path($type, $object, array $extraParams = [])
     {
         return $this->generate($type, $object, false, $extraParams);
     }
 
-    public function url($type, $object, array $extraParams = array())
+    public function url($type, $object, array $extraParams = [])
     {
         return $this->generate($type, $object, true, $extraParams);
     }
