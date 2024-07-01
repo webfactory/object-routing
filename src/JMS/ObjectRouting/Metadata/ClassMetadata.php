@@ -25,11 +25,12 @@ class ClassMetadata extends MergeableClassMetadata
 {
     public $routes = [];
 
-    public function addRoute($type, $name, array $params = [])
+    public function addRoute($type, $name, array $params = [], array $paramExpressions = [])
     {
         $this->routes[$type] = [
             'name' => $name,
             'params' => $params,
+            'paramExpressions' => $paramExpressions,
         ];
     }
 

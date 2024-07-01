@@ -23,6 +23,8 @@ use JMS\ObjectRouting\Metadata\Driver\AttributeDriver;
 use Metadata\Driver\DriverChain;
 use Metadata\MetadataFactory;
 use Metadata\MetadataFactoryInterface;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\ExpressionLanguage\ParsedExpression;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class ObjectRouter
@@ -30,22 +32,25 @@ class ObjectRouter
     private $router;
     private $metadataFactory;
     private $accessor;
+    private $expressionLanguage;
 
-    public static function create(RouterInterface $router)
+    public static function create(RouterInterface $router, ?ExpressionLanguage $expressionLanguage = null)
     {
         return new self(
             $router,
             new MetadataFactory(new DriverChain([
                 new AttributeDriver(),
-            ]))
+            ])),
+            $expressionLanguage
         );
     }
 
-    public function __construct(RouterInterface $router, MetadataFactoryInterface $metadataFactory)
+    public function __construct(RouterInterface $router, MetadataFactoryInterface $metadataFactory, ?ExpressionLanguage $expressionLanguage = null)
     {
         $this->router = $router;
         $this->metadataFactory = $metadataFactory;
         $this->accessor = new PropertyAccessor();
+        $this->expressionLanguage = $expressionLanguage ?? new ExpressionLanguage();
     }
 
     /**
@@ -78,6 +83,22 @@ class ObjectRouter
         $params = $extraParams;
         foreach ($route['params'] as $k => $path) {
             $params[$k] = $this->accessor->getValue($object, $path);
+        }
+
+        foreach ($route['paramExpressions'] as $k => $expression) {
+            if (!$expression instanceof ParsedExpression) {
+                $expression = $this->expressionLanguage->parse($expression, ['this', 'params']);
+                $metadata->routes[$type]['paramExpressions'][$k] = $expression;
+            }
+            $evaluated = $this->expressionLanguage->evaluate($expression, ['this' => $object, 'params' => $params]);
+            if ('?' === $k[0]) {
+                if (null === $evaluated) {
+                    continue;
+                }
+                $params[substr($k, 1)] = $evaluated;
+            } else {
+                $params[$k] = $evaluated;
+            }
         }
 
         return $this->router->generate($route['name'], $params, $absolute);

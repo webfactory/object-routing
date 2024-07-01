@@ -71,7 +71,12 @@ class XmlDriver extends AbstractFileDriver
                 $params[(string) $p->attributes()] = (string) $p;
             }
 
-            $metadata->addRoute($type, $name, $params);
+            $paramExpressions = [];
+            foreach ($r->xpath('./paramExpression') as $p) {
+                $paramExpressions[(string) $p->attributes()] = (string) $p;
+            }
+
+            $metadata->addRoute($type, $name, $params, $paramExpressions);
         }
 
         return $metadata;

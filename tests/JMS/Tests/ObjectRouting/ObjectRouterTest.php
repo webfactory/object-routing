@@ -53,6 +53,67 @@ class ObjectRouterTest extends TestCase
         $this->assertEquals('/foobar', $this->router->generate('view', $object));
     }
 
+    public function testGenerateWithParamExpression()
+    {
+        $metadata = new ClassMetadata('stdClass');
+        $metadata->addRoute('view', 'view_name', [], ['foo' => 'this.bar']);
+
+        $object = new \stdClass();
+        $object->bar = 'baz';
+
+        $this->factory->expects($this->once())
+            ->method('getMetadataForClass')
+            ->willReturn($metadata);
+
+        $this->adapter->expects($this->once())
+            ->method('generate')
+            ->with('view_name', ['foo' => 'baz'], false)
+            ->willReturn('/foobar');
+
+        $this->assertEquals('/foobar', $this->router->generate('view', $object));
+    }
+
+    public function testGenerateWithParamExpressionThatRefersToParam()
+    {
+        $metadata = new ClassMetadata('stdClass');
+        $metadata->addRoute('view', 'view_name', ['foo' => 'bar'], ['concat' => 'params["foo"] ~ this.bar']);
+
+        $object = new \stdClass();
+        $object->bar = 'baz';
+
+        $this->factory->expects($this->once())
+            ->method('getMetadataForClass')
+            ->willReturn($metadata);
+
+        $this->adapter->expects($this->once())
+            ->method('generate')
+            ->with('view_name', ['foo' => 'baz', 'concat' => 'bazbaz'], false)
+            ->willReturn('/foobar');
+
+        $this->assertEquals('/foobar', $this->router->generate('view', $object));
+    }
+
+    public function testGenerateWithNullableParamExpression()
+    {
+        $metadata = new ClassMetadata('stdClass');
+        $metadata->addRoute('view', 'view_name', [], ['?foo' => 'this.bar', '?quux' => 'this.barbaz']);
+
+        $object = new \stdClass();
+        $object->bar = 'baz';
+        $object->barbaz = null;
+
+        $this->factory->expects($this->once())
+            ->method('getMetadataForClass')
+            ->willReturn($metadata);
+
+        $this->adapter->expects($this->once())
+            ->method('generate')
+            ->with('view_name', ['foo' => 'baz'], false)
+            ->willReturn('/foobar');
+
+        $this->assertEquals('/foobar', $this->router->generate('view', $object));
+    }
+
     public function testGenerateNonExistentType()
     {
         $this->expectException(\RuntimeException::class);
