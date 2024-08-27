@@ -45,7 +45,7 @@ class XmlDriver extends AbstractFileDriver
         }
         $metadata = new ClassMetadata($name = $class->name);
         if (!$elems = $elem->xpath("./class[@name = '".$name."']")) {
-            throw new RuntimeException(sprintf('Could not find class %s inside XML element.', $name));
+            throw new RuntimeException(\sprintf('Could not find class %s inside XML element.', $name));
         }
         $elem = reset($elems);
         $metadata->fileResources[] = $file;

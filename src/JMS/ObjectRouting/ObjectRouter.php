@@ -65,17 +65,17 @@ class ObjectRouter
     public function generate($type, $object, $absolute = false, array $extraParams = [])
     {
         if (!\is_object($object)) {
-            throw new \InvalidArgumentException(sprintf('$object must be an object, but got "%s".', \gettype($object)));
+            throw new \InvalidArgumentException(\sprintf('$object must be an object, but got "%s".', \gettype($object)));
         }
 
         /** @var $metadata ClassMetadata */
         $metadata = $this->metadataFactory->getMetadataForClass($object::class);
         if (null === $metadata) {
-            throw new \RuntimeException(sprintf('There were no object routes defined for class "%s".', $object::class));
+            throw new \RuntimeException(\sprintf('There were no object routes defined for class "%s".', $object::class));
         }
 
         if (!isset($metadata->routes[$type])) {
-            throw new \RuntimeException(sprintf('The object of class "%s" has no route with type "%s". Available types: %s', $object::class, $type, implode(', ', array_keys($metadata->routes))));
+            throw new \RuntimeException(\sprintf('The object of class "%s" has no route with type "%s". Available types: %s', $object::class, $type, implode(', ', array_keys($metadata->routes))));
         }
 
         $route = $metadata->routes[$type];

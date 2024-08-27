@@ -21,7 +21,7 @@ class XmlErrorException extends RuntimeException
             default:
                 $level = 'UNKNOWN';
         }
-        parent::__construct(sprintf('[%s] %s in %s (line: %d, column: %d)', $level, $error->message, $error->file, $error->line, $error->column));
+        parent::__construct(\sprintf('[%s] %s in %s (line: %d, column: %d)', $level, $error->message, $error->file, $error->line, $error->column));
         $this->xmlError = $error;
     }
 
