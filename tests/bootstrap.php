@@ -1,21 +1,8 @@
 <?php
 
-if (!is_file($autoloadFile = __DIR__.'/../vendor/autoload.php')) {
-    echo 'Could not find "vendor/autoload.php". Did you forget to run "composer install --dev"?'.\PHP_EOL;
-    exit(1);
-}
+use Symfony\Component\ErrorHandler\ErrorHandler;
 
-require_once $autoloadFile;
+// Work around https://github.com/symfony/symfony/issues/53812 for the time being (Symfony (6.4-7.1)/PHPUnit 11 issue)
+set_exception_handler([new ErrorHandler(), 'handleException']);
 
-Doctrine\Common\Annotations\AnnotationRegistry::registerLoader('class_exists');
-
-spl_autoload_register(function ($class) {
-    if (str_starts_with($class, 'JMS\Tests\\')) {
-        $path = __DIR__.'/../tests/'.strtr($class, '\\', '/').'.php';
-        if (file_exists($path) && is_readable($path)) {
-            require_once $path;
-
-            return true;
-        }
-    }
-});
+require_once __DIR__.'/../vendor/autoload.php';
